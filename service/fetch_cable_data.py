@@ -6,10 +6,7 @@ third-party data, not something this project authors) - run this once to
 produce data/baltic_cables.geojson, re-run any time to refresh it.
 
 Data source: https://www.submarinecablemap.com/api/v3/cable/cable-geo.json
-- the same API the public interactive map itself calls from any visitor's
-browser. This is NOT TeleGeography's own licensed, authoritative geocoded
-dataset (that's a paid annual license) - it's a reasonable approximation
-good enough for a proximity heuristic, not for anything safety-critical
+it's a reasonable approximation good enough for a proximity heuristic, not for anything safety-critical
 or commercial.
 
 Usage:
