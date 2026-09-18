@@ -1,9 +1,8 @@
 """
-Plain functions wrapping the forecast pipeline (forecast_engine, gribexport,
-opencpn_bridge), exposed to agents as MCP tools by mcp_server.py. Kept
-separate from the MCP wiring so the actual logic is trivially testable
-without an MCP client/server round-trip - the agent doesn't get a "generate
-arbitrary code" tool, only these specific, bounded actions, and every
+Plain functions wrapping the forecast pipeline (forecast_engine, gribexport, opencpn_bridge),
+exposed to agents as MCP tools by mcp_server.py.
+Kept separate from the MCP wiring so the logic is testable without an MCP client/server round-trip 
+the agent doesn't get a "generate arbitrary code" tool, only these specific, bounded actions, and every
 function returns a small JSON-serializable summary rather than raw forecast
 arrays, to keep an agent's context bounded over a long session.
 """
@@ -42,7 +41,7 @@ def _summarize_warnings(warnings_bundle) -> Dict:
 def generate_forecast(location: str, forecast_type: str = "navigation") -> Dict:
     """Run the forecast pipeline for a location and export it to GRIB2.
     Includes daily_breakdown (one entry per day: max_beaufort_force,
-    max_wave_height_m, worst_timing) - this is already everything needed to
+    max_wave_height_m, worst_timing) this is hopefully already? everything needed to
     answer a "what's the forecast for the next few days" question; there is
     no need to read the GRIB2 file or this project's source code to get
     more detail. Does NOT push to OpenCPN - call push_grib_to_opencpn
