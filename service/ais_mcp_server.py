@@ -1,12 +1,12 @@
 """
-MCP server exposing the live AIS feed (ais_ingest.py / ais_db.py) as tools
+MCP server for exposing the live AIS feed (ais_ingest.py / ais_db.py) as tools
 for Hermes - vessel lookup, area search, storm-risk correlation with the
 forecast pipeline, and AIS-gap ("went dark near X") detection.
 
 A separate server from mcp_server.py (earth2-forecast) - different domain,
 independently enable/disable-able. See config.py's AIS_* comment block for
 why the underlying feed is a separate aisstream.io connection from the
-Thor's existing AIS stack.
+AGX's Thor's existing AIS stack (note to self don't mess with that it works).
 
 Register with Hermes:
     hermes mcp add ais-tracker \\
