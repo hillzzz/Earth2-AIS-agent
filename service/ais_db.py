@@ -5,7 +5,7 @@ for why this is a separate feed/key from the Thor's existing AIS stack).
 ais_ingest.py writes; ais_mcp_server.py (and this module's own query
 helpers) read. Schema is deliberately small: a throttled position history
 per vessel, and the latest known static (name/type/dimensions) data per
-vessel - everything else (gaps, area queries, "supertanker" filtering) is
+vessel and everything else (gaps, area queries, "supertanker" filtering) is
 computed on read rather than maintained as derived tables, so it's always
 correct against whatever's actually stored.
 """
@@ -185,7 +185,8 @@ def vessels_in_bbox(lat_s: float, lon_w: float, lat_n: float, lon_e: float,
     than max_age_hours. ship_type_prefix: e.g. "Tanker"/"Cargo"/"Fishing"
     (matches SHIP_TYPE_LABELS values). min_length_m: from AIS dimension
     fields (to_bow + to_stern) - the "supertanker" filter (Hormuz use
-    case) is ship_type_prefix="Tanker", min_length_m~250, which is an
+    case) (Note no AIA coverage for Hormuz but left in because its usefull elswhere)
+    is ship_type_prefix="Tanker", min_length_m~250, which is an
     approximation: AIS ship-type codes distinguish Tanker broadly, not
     VLCC/ULCC specifically."""
     conn = get_connection()
