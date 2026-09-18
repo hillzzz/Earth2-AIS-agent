@@ -6,12 +6,11 @@ a separate key/connection from the Thor's existing AIS stack, not an
 extension of it).
 
 Connection handling (idle-timeout detection, exponential backoff,
-reconnect) mirrors the Thor's aisstream_to_opencpn.py, whose own commit
-history documents hard-won lessons from a real aisstream.io outage
-(zombie connections the WebSocket ping/pong couldn't detect because the
-server kept answering pings while delivering zero data frames, and a
-reconnect storm on instant retry earning extended rate-limiting) - reusing
-that proven pattern rather than re-learning it the same way.
+reconnect) mirrors the AGX Thor's (Chart Plotter) aisstream_to_opencpn.py,
+Problem a real aisstream.io outage (zombie connections the WebSocket ping/pong
+couldn't detect because the server kept answering pings while delivering zero data frames, and a
+reconnect storm on instant retry earning extended rate-limiting errors reusing
+that proven code the same way.
 
 Usage:
     AIS_API_KEY=... python3 ais_ingest.py
