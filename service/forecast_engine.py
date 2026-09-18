@@ -306,16 +306,6 @@ class ForecastEngine:
         - deliberately much smaller than the wide, padded crop used for the
         rest of the pipeline (chart extent, storm tracking).
 
-        Found live: a Solent navigation-tier forecast flagged 36+kt gusts as
-        "gale warnings for Solent" that were actually off Scotland, near
-        Ireland, or in the Bay of Biscay - all 150-400+ miles away, but
-        still inside the wide crop's ~400-mile-radius window, since the
-        warning generators scan for the worst wind/wave *anywhere in the
-        grid they're given*. The Met Office's own Shipping Forecast areas
-        are exactly this scale (Solent's real extent is roughly 50x35
-        miles) - "gale warning for Solent" should mean wind within the
-        Solent, not somewhere in the wider approaches to it.
-
         Uses the resolved location's own Met Office sea-area bounding box
         when it falls inside one (regions.area_for_location) - derived from
         the box's real half-extents, so the window is sized to the actual
