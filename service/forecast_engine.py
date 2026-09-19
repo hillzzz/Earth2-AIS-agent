@@ -776,7 +776,23 @@ class ForecastEngine:
         def _do_fetch() -> Dict[str, np.ndarray]:
             cycle_time = self._resolve_available_cycle(datasources.get_wave_forecast_source, initial_time)
             lead_times = np.array([ts - cycle_time for ts in timesteps], dtype="timedelta64[ns]")
-            interp_to = {"_lat": np.asarray(lat_array), "_lon": np.asarray(lon_array)}
+            # IFS Open Data's native longitude is 0-360, but lon_array here
+            # is the already-cropped regional grid, which _crop_to_region
+            # rebuilds analytically and can land in the negative branch
+            # (e.g. -2.25..3.75 for a window near the Solent - see its
+            # docstring). xarray's .interp() (used under fetch_data's
+            # interp_to) does NOT wrap longitude, so any negative target
+            # value falls outside the source's [0, 360) coordinate range and
+            # interpolates to NaN. Only the sliver of the window that
+            # happened to already be >=0 (the *eastern* edge) came back with
+            # real data - live-confirmed: for the Solent this NaN'd out
+            # almost the whole window and left a narrow strip of real IFS
+            # data actually covering the North Sea/Dover Strait side of the
+            # crop, not the Solent itself. Normalize to 0-360 for the
+            # interpolation target only; the returned array still aligns
+            # positionally with our original (possibly negative-branch)
+            # lat_array/lon_array, so nothing downstream needs to change.
+            interp_to = {"_lat": np.asarray(lat_array), "_lon": np.asarray(lon_array) % 360.0}
 
             swh = _fetch_one(datasources.get_wave_forecast_source(), "swh", lead_times, interp_to, cycle_time)
             gust = _fetch_gust(lead_times, interp_to, cycle_time)

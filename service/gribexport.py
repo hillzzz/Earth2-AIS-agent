@@ -10,7 +10,7 @@ changes needed.
 """
 
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Optional
 
@@ -23,18 +23,32 @@ logger = logging.getLogger(__name__)
 # type (heightAboveGround=10, surface, meanSea) automatically - see
 # grib_pi/GRIB2 shortName tests done during development, e.g. "swh" resolves
 # to discipline 10 (oceanographic) category 0 number 3, which is what
-# grib_pi expects for a wave-height layer. "i10fg" (not "10fg") is used for
-# gust because our gust field is instantaneous per lead time, not a
-# statistically-processed max-since-previous-step quantity - "10fg" would
-# require a different (time-range) product template we don't have the
-# underlying statistics for.
+# grib_pi expects for a wave-height layer.
+#
+# "10fg" (not "i10fg") is used for gust: real-world GRIB2 gust products
+# (verified against ECMWF's own cached output) universally use "10fg" on
+# product definition template 8 (statistically-processed, max-over-a-time-
+# window), not template 0 (instantaneous). grib_pi/OpenCPN apparently
+# doesn't recognise the instantaneous encoding as a gust layer at all - a
+# real, confirmed cause of gust data being present in the file but not
+# displayed. See STATISTICAL_PROCESSING_VARIABLES below for the extra
+# fields template 8 needs.
 VARIABLE_SHORTNAMES = {
     "wind_u": "10u",
     "wind_v": "10v",
-    "wind_gust": "i10fg",
+    "wind_gust": "10fg",
     "waves": "swh",
     "mslp_hpa": "prmsl",
 }
+
+# Variables whose shortName resolves to a statistically-processed product
+# definition template (pdt=8) rather than an instantaneous one (pdt=0).
+# These need explicit typeOfStatisticalProcessing/lengthOfTimeRange/"end of
+# overall time interval" fields - eccodes does NOT derive the end-of-
+# interval date/time from dataDate/dataTime/forecastTime automatically, it
+# defaults to the GRIB2 sample template's own baked-in date otherwise
+# (confirmed live: defaults to 2007-03-23 regardless of our actual data).
+STATISTICAL_PROCESSING_VARIABLES = {"wind_gust"}
 
 # mslp_hpa is stored in hPa (see forecast_engine._run_inference); prmsl's
 # native GRIB2 unit is Pa.
@@ -135,6 +149,40 @@ def export_grib2(forecast_result: Dict, output_path: Path) -> Optional[Path]:
                     eccodes.codes_set(gid, "dataTime", int(initial_time.strftime("%H%M")))
                     eccodes.codes_set(gid, "indicatorOfUnitOfTimeRange", 1)  # hours
                     eccodes.codes_set(gid, "forecastTime", int(step_hours))
+
+                    if var_name in STATISTICAL_PROCESSING_VARIABLES:
+                        # lengthOfTimeRange = "max gust over the N hours
+                        # ending at this timestep" - use the actual gap to
+                        # the previous timestep (falls back to the gap to
+                        # the next timestep at t=0, where there is no
+                        # previous one; 1h floor so a zero-length window
+                        # never reaches eccodes).
+                        if t_idx > 0:
+                            prev_step_hours = round(
+                                (timesteps[t_idx - 1] - initial_time).total_seconds() / 3600.0
+                            )
+                            interval_hours = step_hours - prev_step_hours
+                        elif len(timesteps) > 1:
+                            next_step_hours = round(
+                                (timesteps[1] - initial_time).total_seconds() / 3600.0
+                            )
+                            interval_hours = next_step_hours - step_hours
+                        else:
+                            interval_hours = 1
+                        interval_hours = max(int(interval_hours), 1)
+
+                        valid_time = initial_time + timedelta(hours=step_hours)
+                        eccodes.codes_set(gid, "typeOfStatisticalProcessing", 2)  # maximum
+                        eccodes.codes_set(gid, "typeOfTimeIncrement", 2)
+                        eccodes.codes_set(gid, "indicatorOfUnitForTimeRange", 1)  # hours
+                        eccodes.codes_set(gid, "lengthOfTimeRange", interval_hours)
+                        eccodes.codes_set(gid, "yearOfEndOfOverallTimeInterval", valid_time.year)
+                        eccodes.codes_set(gid, "monthOfEndOfOverallTimeInterval", valid_time.month)
+                        eccodes.codes_set(gid, "dayOfEndOfOverallTimeInterval", valid_time.day)
+                        eccodes.codes_set(gid, "hourOfEndOfOverallTimeInterval", valid_time.hour)
+                        eccodes.codes_set(gid, "minuteOfEndOfOverallTimeInterval", valid_time.minute)
+                        eccodes.codes_set(gid, "secondOfEndOfOverallTimeInterval", valid_time.second)
+                        eccodes.codes_set(gid, "numberOfTimeRange", 1)
 
                     flat = values.flatten()
                     nan_mask = np.isnan(flat)
