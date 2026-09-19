@@ -189,4 +189,5 @@ this was caught by checking the actual subprocess environment
 
 ## License
 
-MIT - see `LICENSE`.
+All rights reserved - see `LICENSE`. This is not open-source software;
+contact the copyright holder for permission to use it.
