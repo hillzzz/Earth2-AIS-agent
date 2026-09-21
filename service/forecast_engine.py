@@ -599,11 +599,27 @@ class ForecastEngine:
             # earth2studio's "msl" is Pa; warnings/plots want hPa.
             forecast_data["variables"]["mslp_hpa"] = msl / 100.0
 
-        if gust is not None:
-            forecast_data["variables"]["wind_gust"] = gust
-
         wind_speed = np.sqrt(forecast_data["variables"]["wind_u"] ** 2 + forecast_data["variables"]["wind_v"] ** 2)
         forecast_data["variables"]["waves"] = 0.025 * wind_speed ** 2
+
+        # Unlike wind_u/wind_v/waves above, wind_gust had no guaranteed
+        # baseline here - if WindgustAFNO returned None (always true for FCN,
+        # see WINDGUST_REQUIRED_VARS/_maybe_compute_gust above) and the real
+        # IFS overlay in generate_forecast() also misses (best-effort; can
+        # fail on rate-limiting/timeout/lead-time gaps - see README "Known
+        # gaps"), "wind_gust" was simply absent from forecast_data entirely.
+        # gribexport.py silently skips any variable it can't find
+        # (`variables.get(var_name) is None: continue`), so the GRIB2 file
+        # sent to OpenCPN had wind and wave messages but zero gust messages -
+        # this was the actual cause of gusts missing from the chart plotter,
+        # separate from the GRIB2 template bug fixed previously. Same
+        # gust-factor heuristic gale_warnings.py already uses as its own
+        # fallback (see generate_wind_warnings's gust_factor=1.3) - real IFS
+        # gust data, when the overlay succeeds, still overrides this later.
+        if gust is not None:
+            forecast_data["variables"]["wind_gust"] = gust
+        else:
+            forecast_data["variables"]["wind_gust"] = wind_speed * 1.3
 
         return forecast_data
 
