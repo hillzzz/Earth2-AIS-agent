@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earth-2 vs Met Office — daily forecast comparison</title>
+<style>
+  :root { --bg:#0f1115; --panel:#161a22; --ink:#e7ecf3; --muted:#9aa4b2;
+          --line:#262c37; --accent:#5aa9ff; --ok:#3fb950; --warn:#d4a72c; --bad:#f0766a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1080px; margin:0 auto; padding:28px 20px 64px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .subtitle { color:var(--muted); margin:0 0 24px; }
+  .report { background:var(--panel); border:1px solid var(--line); border-radius:10px;
+            padding:18px 20px; margin:0 0 22px; }
+  .report h2 { font-size:17px; margin:0 0 6px; }
+  .meta { color:var(--muted); font-size:13px; margin:0 0 14px; }
+  .note { background:rgba(212,167,44,.12); border-left:3px solid var(--warn);
+          padding:8px 12px; border-radius:6px; margin:10px 0; font-size:13.5px; }
+  table { border-collapse:collapse; width:100%; margin:6px 0 4px; font-size:13.5px; }
+  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; background:rgba(255,255,255,.02); }
+  .verdict { font-weight:600; } .match { color:var(--ok); } .disc { color:var(--bad); }
+  .area { background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:8px;
+          padding:12px 14px; margin:12px 0; }
+  .area h3 { font-size:15px; margin:0 0 8px; color:var(--accent); }
+  .area ul { margin:6px 0 0; padding-left:18px; }
+  .area li { margin:3px 0; }
+  .fail { color:var(--bad); font-weight:600; }
+  .foot { color:var(--muted); font-size:12.5px; margin-top:10px; padding-top:10px;
+          border-top:1px dashed var(--line); }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Earth-2 vs Met Office — daily forecast comparison</h1>
+  <p class="subtitle">Random 3 shipping-forecast areas per day. Newest run is at the bottom.</p>
+  <div class="reports">
+<section class="report">
+<h2>2026-09-20 09:30 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Viking, FitzRoy, Plymouth</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Viking</td><td>9</td><td>5.3m</td><td>8</td><td>Rough or very rough, becoming moderate or rough later.</td><td>Y / Y</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>FitzRoy</td><td>5</td><td>2.7m</td><td>6</td><td>Moderate or rough.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Plymouth</td><td>7</td><td>3.0m</td><td>5</td><td>Slight or moderate.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Viking</h3>
+<ul>
+<li>Earth-2 (day 1): peak 9, wave 5.3m, gale warnings 6, storm systems 2, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F9, 2026-09-21:F8, 2026-09-22:F7, 2026-09-23:F6, 2026-09-24:F9, 2026-09-25:F9</li>
+<li>Met Office wind: Westerly veering northwesterly 6 to gale 8, decreasing 4 or 5 later.</li>
+<li>Met Office sea state: Rough or very rough, becoming moderate or rough later.</li>
+<li>Met Office weather: Squally showers. &nbsp;|&nbsp; visibility: Moderate or good, occasionally poor at first.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 9 vs Met Office 8 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~5.3m (very rough/high) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>FitzRoy</h3>
+<ul>
+<li>Earth-2 (day 1): peak 5, wave 2.7m, gale warnings 2, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F5, 2026-09-21:F5, 2026-09-22:F5, 2026-09-23:F6, 2026-09-24:F8, 2026-09-25:F5</li>
+<li>Met Office wind: Variable 2 to 4 in north, easterly or northeasterly mainly 3 to 5 in south, but occasionally 6 in southeast.</li>
+<li>Met Office sea state: Moderate or rough.</li>
+<li>Met Office weather: Mainly fair. &nbsp;|&nbsp; visibility: Moderate or good.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 5 vs Met Office 6 (Earth-2 weaker).</li>
+</ul>
+</div>
+<div class="area">
+<h3>Plymouth</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.0m, gale warnings 0, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F7, 2026-09-21:F4, 2026-09-22:F4, 2026-09-23:F6, 2026-09-24:F7, 2026-09-25:F6</li>
+<li>Met Office wind: West or northwest 3 to 5 becoming variable 3 or less.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Occasional rain at first, fog patches later. &nbsp;|&nbsp; visibility: Moderate or good, occasionally poor at first and very poor later.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 7 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~3.0m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-20 09:32 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Humber, Fastnet, Plymouth</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Humber</td><td>8</td><td>3.8m</td><td>6</td><td>Rough until later in northeast, otherwise slight or moderate.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Fastnet</td><td>6</td><td>3.5m</td><td>4</td><td>Rough until later in southwest, otherwise slight or moderate.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Plymouth</td><td>7</td><td>3.0m</td><td>5</td><td>Slight or moderate.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Humber</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 3.8m, gale warnings 6, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F8, 2026-09-21:F8, 2026-09-22:F5, 2026-09-23:F7, 2026-09-24:F8, 2026-09-25:F8</li>
+<li>Met Office wind: West 5 or 6 veering northwest 3 to 5.</li>
+<li>Met Office sea state: Rough until later in northeast, otherwise slight or moderate.</li>
+<li>Met Office weather: Occasional rain at first. &nbsp;|&nbsp; visibility: Good, occasionally moderate at first.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 8 vs Met Office 6 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Fastnet</h3>
+<ul>
+<li>Earth-2 (day 1): peak 6, wave 3.5m, gale warnings 5, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F6, 2026-09-21:F7, 2026-09-22:F5, 2026-09-23:F6, 2026-09-24:F10, 2026-09-25:F9</li>
+<li>Met Office wind: Variable 2 to 4.</li>
+<li>Met Office sea state: Rough until later in southwest, otherwise slight or moderate.</li>
+<li>Met Office weather: Occasional rain at first. &nbsp;|&nbsp; visibility: Good, occasionally poor at first.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 6 vs Met Office 4 (Earth-2 stronger).</li>
+</ul>
+</div>
+<div class="area">
+<h3>Plymouth</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.0m, gale warnings 0, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F7, 2026-09-21:F4, 2026-09-22:F4, 2026-09-23:F6, 2026-09-24:F7, 2026-09-25:F6</li>
+<li>Met Office wind: West or northwest 3 to 5 becoming variable 3 or less.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Occasional rain at first, fog patches later. &nbsp;|&nbsp; visibility: Moderate or good, occasionally poor at first and very poor later.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 7 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~3.0m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-20 23:01 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Shannon, Forth, Lundy</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Shannon</td><td>7</td><td>4.4m</td><td>6</td><td>Moderate or rough.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Forth</td><td>9</td><td>5.2m</td><td>6</td><td>Slight or moderate.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Lundy</td><td>7</td><td>3.1m</td><td>4</td><td>Slight or moderate.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Shannon</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 4.4m, gale warnings 5, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F7, 2026-09-21:F7, 2026-09-22:F5, 2026-09-23:F7, 2026-09-24:F10, 2026-09-25:F10</li>
+<li>Met Office wind: Southerly or southwesterly 3 to 5, occasionally 6 in north.</li>
+<li>Met Office sea state: Moderate or rough.</li>
+<li>Met Office weather: Rain. &nbsp;|&nbsp; visibility: Good, occasionally moderate.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 7 vs Met Office 6 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~4.4m (very rough/high) vs Met Office &#x27;rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Forth</h3>
+<ul>
+<li>Earth-2 (day 1): peak 9, wave 5.2m, gale warnings 9, storm systems 1, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F9, 2026-09-21:F8, 2026-09-22:F7, 2026-09-23:F6, 2026-09-24:F10, 2026-09-25:F9</li>
+<li>Met Office wind: Northwest 4 to 6, backing west or southwest 3 or 4.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Fair. &nbsp;|&nbsp; visibility: Good.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 3: Earth-2 9 vs Met Office 6 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~5.2m (very rough/high) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Lundy</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.1m, gale warnings 3, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-20:F7, 2026-09-21:F4, 2026-09-22:F4, 2026-09-23:F6, 2026-09-24:F8, 2026-09-25:F6</li>
+<li>Met Office wind: Variable 2 to 4.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Occasional drizzle. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 3: Earth-2 7 vs Met Office 4 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~3.1m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-21 23:03 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Hebrides, Cromarty, Thames</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Hebrides</td><td>8</td><td>4.0m</td><td>7</td><td>Moderate or rough, becoming rough or very rough.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Cromarty</td><td>8</td><td>3.6m</td><td>5</td><td>Smooth or slight.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Thames</td><td>6</td><td>n/a</td><td>4</td><td>Smooth or slight.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Hebrides</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 4.0m, gale warnings 8, storm systems 2, wave source: fetch-limited estimate (SMB/CEM, coastline-distance fetch)</li>
+<li>Earth-2 full window: 2026-09-21:F8, 2026-09-22:F7, 2026-09-23:F7, 2026-09-24:F9, 2026-09-25:F9, 2026-09-26:F6</li>
+<li>Met Office wind: Southwesterly 4 to 6, occasionally 7 at first.</li>
+<li>Met Office sea state: Moderate or rough, becoming rough or very rough.</li>
+<li>Met Office weather: Occasional rain or showers. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 8 vs Met Office 7 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~4.0m (rough) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Cromarty</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 3.6m, gale warnings 9, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-21:F8, 2026-09-22:F7, 2026-09-23:F7, 2026-09-24:F11, 2026-09-25:F9, 2026-09-26:F8</li>
+<li>Met Office wind: West or southwest 3 to 5, becoming variable 2 to 4 later.</li>
+<li>Met Office sea state: Smooth or slight.</li>
+<li>Met Office weather: Occasional rain. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 3: Earth-2 8 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~3.6m (rough) vs Met Office &#x27;slight&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Thames</h3>
+<ul>
+<li>Earth-2 (day 1): peak 6, wave n/a, gale warnings 0, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-21:F6, 2026-09-22:F4, 2026-09-23:F5, 2026-09-24:F7, 2026-09-25:F6, 2026-09-26:F4</li>
+<li>Met Office wind: Variable 2 to 4.</li>
+<li>Met Office sea state: Smooth or slight.</li>
+<li>Met Office weather: Fair. &nbsp;|&nbsp; visibility: Moderate or good.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 6 vs Met Office 4 (Earth-2 stronger).</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-22 23:02 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Sole, Faeroes, Bailey</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Sole</td><td>5</td><td>3.4m</td><td>5</td><td>Moderate or rough.</td><td>– / –</td><td class="verdict match">MATCH</td></tr>
+<tr><td>Faeroes</td><td>9</td><td>7.0m</td><td>6</td><td>Rough or very rough, becoming rough occasionally moderate later.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Bailey</td><td>8</td><td>4.1m</td><td>6</td><td>Very rough or high, becoming rough or very rough.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Sole</h3>
+<ul>
+<li>Earth-2 (day 1): peak 5, wave 3.4m, gale warnings 4, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-22:F5, 2026-09-23:F6, 2026-09-24:F8, 2026-09-25:F6, 2026-09-26:F8, 2026-09-27:F8</li>
+<li>Met Office wind: Variable 2 to 4, becoming northeasterly 3 to 5, veering southerly later in west.</li>
+<li>Met Office sea state: Moderate or rough.</li>
+<li>Met Office weather: Showers. &nbsp;|&nbsp; visibility: Good occasionally moderate.</li>
+<li><b>Findings:</b></li>
+    <li>No discrepancies flagged on the overlapping 24h window.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Faeroes</h3>
+<ul>
+<li>Earth-2 (day 1): peak 9, wave 7.0m, gale warnings 15, storm systems 4, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-22:F9, 2026-09-23:F7, 2026-09-24:F11, 2026-09-25:F11, 2026-09-26:F9, 2026-09-27:F8</li>
+<li>Met Office wind: Southwesterly 4 to 6.</li>
+<li>Met Office sea state: Rough or very rough, becoming rough occasionally moderate later.</li>
+<li>Met Office weather: Squally showers. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 3: Earth-2 9 vs Met Office 6 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~7.0m (very rough/high) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Bailey</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 4.1m, gale warnings 12, storm systems 7, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-22:F8, 2026-09-23:F6, 2026-09-24:F9, 2026-09-25:F9, 2026-09-26:F9, 2026-09-27:F8</li>
+<li>Met Office wind: Southwest 4 to 6.</li>
+<li>Met Office sea state: Very rough or high, becoming rough or very rough.</li>
+<li>Met Office weather: Showers. &nbsp;|&nbsp; visibility: Good occasionally moderate.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 8 vs Met Office 6 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~4.1m (very rough/high) vs Met Office &#x27;high&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-23 23:08 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Faeroes, Bailey, German Bight</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Faeroes</td><td>7</td><td>3.6m</td><td>9</td><td>Moderate or rough, becoming very rough or high later, occasionally very high later in far southwest.</td><td>– / Y</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Bailey</td><td>5</td><td>4.5m</td><td>10</td><td>Rough becoming very rough, then high or very high later.</td><td>– / Y</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>German Bight</td><td>9</td><td>2.3m</td><td>8</td><td>Slight at first in east, otherwise moderate or rough.</td><td>Y / Y</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Faeroes</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.6m, gale warnings 10, storm systems 4, wave source: fetch-limited estimate (SMB/CEM, coastline-distance fetch)</li>
+<li>Earth-2 full window: 2026-09-23:F7, 2026-09-24:F10, 2026-09-25:F10, 2026-09-26:F8, 2026-09-27:F8, 2026-09-28:F7</li>
+<li>Met Office wind: Southwesterly 3 to 5, backing southerly or southeasterly 7 to severe gale 9, then veering southwest later.</li>
+<li>Met Office sea state: Moderate or rough, becoming very rough or high later, occasionally very high later in far southwest.</li>
+<li>Met Office weather: Rain, then squally showers. &nbsp;|&nbsp; visibility: Good, becoming moderate or poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 7 vs Met Office 9 (Earth-2 weaker).</li>
+    <li>Met Office issues a Gale warning here; Earth-2 is below Gale.</li>
+    <li>Sea state: Earth-2 ~3.6m (rough) vs Met Office &#x27;high&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Bailey</h3>
+<ul>
+<li>Earth-2 (day 1): peak 5, wave 4.5m, gale warnings 11, storm systems 6, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-23:F5, 2026-09-24:F9, 2026-09-25:F8, 2026-09-26:F9, 2026-09-27:F9, 2026-09-28:F7</li>
+<li>Met Office wind: Southeast 7 to severe gale 9, veering southwest gale 8 to storm 10.</li>
+<li>Met Office sea state: Rough becoming very rough, then high or very high later.</li>
+<li>Met Office weather: Rain, squally showers later. &nbsp;|&nbsp; visibility: Moderate or poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 5: Earth-2 5 vs Met Office 10 (Earth-2 weaker).</li>
+    <li>Met Office issues a Gale warning here; Earth-2 is below Gale.</li>
+    <li>Sea state: Earth-2 ~4.5m (very rough/high) vs Met Office &#x27;high&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>German Bight</h3>
+<ul>
+<li>Earth-2 (day 1): peak 9, wave 2.3m, gale warnings 1, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-23:F9, 2026-09-24:F6, 2026-09-25:F6, 2026-09-26:F7, 2026-09-27:F6, 2026-09-28:F6</li>
+<li>Met Office wind: Northwest 6 to gale 8, decreasing 4 or 5.</li>
+<li>Met Office sea state: Slight at first in east, otherwise moderate or rough.</li>
+<li>Met Office weather: Showers. &nbsp;|&nbsp; visibility: Good.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 9 vs Met Office 8 (Earth-2 stronger).</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-24 23:10 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Portland, FitzRoy, South Utsire</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Portland</td><td>6</td><td>1.6m</td><td>5</td><td>Slight or moderate.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>FitzRoy</td><td>7</td><td>3.9m</td><td>5</td><td>Moderate or rough, occasionally very rough at first in far northwest.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>South Utsire</td><td>8</td><td>2.6m</td><td>5</td><td>Moderate, occasionally slight at first.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Portland</h3>
+<ul>
+<li>Earth-2 (day 1): peak 6, wave 1.6m, gale warnings 0, storm systems 0, wave source: fetch-limited estimate (SMB/CEM, coastline-distance fetch)</li>
+<li>Earth-2 full window: 2026-09-24:F6, 2026-09-25:F5, 2026-09-26:F6, 2026-09-27:F7, 2026-09-28:F4, 2026-09-29:F6</li>
+<li>Met Office wind: Variable 2 to 4, becoming northwest 4 or 5 later.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Occasional drizzle. &nbsp;|&nbsp; visibility: Good, occasionally moderate.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 6 vs Met Office 5 (Earth-2 stronger).</li>
+</ul>
+</div>
+<div class="area">
+<h3>FitzRoy</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.9m, gale warnings 1, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-24:F7, 2026-09-25:F6, 2026-09-26:F6, 2026-09-27:F7, 2026-09-28:F7, 2026-09-29:F9</li>
+<li>Met Office wind: North or northwest 3 to 5, becoming variable 2 to 4.</li>
+<li>Met Office sea state: Moderate or rough, occasionally very rough at first in far northwest.</li>
+<li>Met Office weather: Occasional rain. &nbsp;|&nbsp; visibility: Good, occasionally moderate.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 7 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~3.9m (rough) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>South Utsire</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 2.6m, gale warnings 3, storm systems 1, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-24:F8, 2026-09-25:F7, 2026-09-26:F7, 2026-09-27:F8, 2026-09-28:F6, 2026-09-29:F5</li>
+<li>Met Office wind: Westerly or southwesterly 3 to 5.</li>
+<li>Met Office sea state: Moderate, occasionally slight at first.</li>
+<li>Met Office weather: Occasional rain. &nbsp;|&nbsp; visibility: Good, occasionally moderate.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 3: Earth-2 8 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~2.6m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-25 23:01 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Rockall, Humber, Cromarty</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Rockall</td><td>8</td><td>8.5m</td><td>8</td><td>Rough or very rough.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Humber</td><td>5</td><td>1.7m</td><td>5</td><td>Smooth or slight.</td><td>– / –</td><td class="verdict match">MATCH</td></tr>
+<tr><td>Cromarty</td><td>8</td><td>8.2m</td><td>6</td><td>Slight or moderate.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Rockall</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 8.5m, gale warnings 11, storm systems 7, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-25:F8, 2026-09-26:F8, 2026-09-27:F9, 2026-09-28:F7, 2026-09-29:F9, 2026-09-30:F9</li>
+<li>Met Office wind: South or southwest 5 to 7, perhaps gale 8 later.</li>
+<li>Met Office sea state: Rough or very rough.</li>
+<li>Met Office weather: Thundery showers. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~8.5m (very rough/high) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Humber</h3>
+<ul>
+<li>Earth-2 (day 1): peak 5, wave 1.7m, gale warnings 4, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-25:F5, 2026-09-26:F7, 2026-09-27:F9, 2026-09-28:F5, 2026-09-29:F8, 2026-09-30:F9</li>
+<li>Met Office wind: West or northwest 3 or 4, backing southwest 3 to 5, becoming variable, then south later, 2 to 4.</li>
+<li>Met Office sea state: Smooth or slight.</li>
+<li>Met Office weather: Occasional rain at first. &nbsp;|&nbsp; visibility: Good, occasionally moderate at first.</li>
+<li><b>Findings:</b></li>
+    <li>Sea state: Earth-2 ~1.7m (moderate) vs Met Office &#x27;slight&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Cromarty</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 8.2m, gale warnings 11, storm systems 2, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-25:F8, 2026-09-26:F8, 2026-09-27:F9, 2026-09-28:F7, 2026-09-29:F8, 2026-09-30:F9</li>
+<li>Met Office wind: Southwest backing south, 4 to 6.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Showers. &nbsp;|&nbsp; visibility: Good.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 8 vs Met Office 6 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~8.2m (very rough/high) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-26 23:01 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Bailey, Portland, Southeast Iceland</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Bailey</td><td>8</td><td>5.4m</td><td>7</td><td>Rough or very rough.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Portland</td><td>6</td><td>3.3m</td><td>6</td><td>Slight or moderate, occasionally smooth.</td><td>– / –</td><td class="verdict match">MATCH</td></tr>
+<tr><td>Southeast Iceland</td><td>n/a</td><td>n/a</td><td>7</td><td>Rough, occasionally very rough in southeast and moderate in northwest.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Bailey</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 5.4m, gale warnings 10, storm systems 7, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-26:F8, 2026-09-27:F9, 2026-09-28:F7, 2026-09-29:F8, 2026-09-30:F8, 2026-10-01:F8</li>
+<li>Met Office wind: South veering southwest, 5 to 7.</li>
+<li>Met Office sea state: Rough or very rough.</li>
+<li>Met Office weather: Thundery rain then showers. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 8 vs Met Office 7 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~5.4m (very rough/high) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Portland</h3>
+<ul>
+<li>Earth-2 (day 1): peak 6, wave 3.3m, gale warnings 5, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-26:F6, 2026-09-27:F9, 2026-09-28:F6, 2026-09-29:F10, 2026-09-30:F8, 2026-10-01:F6</li>
+<li>Met Office wind: Southeast 3 to 5, veering southwest 4 to 6, becoming variable 4 or less later.</li>
+<li>Met Office sea state: Slight or moderate, occasionally smooth.</li>
+<li>Met Office weather: Thundery showers. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Sea state: Earth-2 ~3.3m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Southeast Iceland</h3>
+<ul>
+<li class="fail">Earth-2: <b>FAILED</b> — Unknown location &#x27;Southeast Iceland&#x27;. Try a Met Office shipping forecast area or UK port name.</li>
+<li>Met Office wind: Cyclonic 4 to 6, occasionally 7 later.</li>
+<li>Met Office sea state: Rough, occasionally very rough in southeast and moderate in northwest.</li>
+<li>Met Office weather: Squally showers. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Earth-2 produced no day-1 breakdown for this area.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-27 23:03 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Fisher, Dover, Tyne</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Fisher</td><td>7</td><td>3.7m</td><td>5</td><td>Slight or moderate.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Dover</td><td>8</td><td>2.2m</td><td>5</td><td>Slight or moderate, occasionally smooth for a time.</td><td>Y / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Tyne</td><td>7</td><td>3.0m</td><td>5</td><td>Slight or moderate, occasionally smooth later.</td><td>– / –</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Fisher</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.7m, gale warnings 4, storm systems 0, wave source: fetch-limited estimate (SMB/CEM, coastline-distance fetch)</li>
+<li>Earth-2 full window: 2026-09-27:F7, 2026-09-28:F7, 2026-09-29:F9, 2026-09-30:F9, 2026-10-01:F6, 2026-10-02:F6</li>
+<li>Met Office wind: Southwest veering northwest, 3 to 5, becoming variable 2 to 4 later.</li>
+<li>Met Office sea state: Slight or moderate.</li>
+<li>Met Office weather: Rain at first. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 7 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~3.7m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Dover</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 2.2m, gale warnings 4, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-27:F8, 2026-09-28:F5, 2026-09-29:F8, 2026-09-30:F8, 2026-10-01:F6, 2026-10-02:F6</li>
+<li>Met Office wind: Variable becoming east or northeast, 3 to 5.</li>
+<li>Met Office sea state: Slight or moderate, occasionally smooth for a time.</li>
+<li>Met Office weather: Occasional rain or showers, thundery later. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 3: Earth-2 8 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Earth-2 flags a Gale (force&gt;=8) here; Met Office has no gale warning.</li>
+    <li>Sea state: Earth-2 ~2.2m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Tyne</h3>
+<ul>
+<li>Earth-2 (day 1): peak 7, wave 3.0m, gale warnings 7, storm systems 0, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-27:F7, 2026-09-28:F6, 2026-09-29:F9, 2026-09-30:F9, 2026-10-01:F8, 2026-10-02:F5</li>
+<li>Met Office wind: West or southwest 3 to 5, becoming variable 2 to 4 later.</li>
+<li>Met Office sea state: Slight or moderate, occasionally smooth later.</li>
+<li>Met Office weather: Mainly fair. &nbsp;|&nbsp; visibility: Good.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by 2: Earth-2 7 vs Met Office 5 (Earth-2 stronger).</li>
+    <li>Sea state: Earth-2 ~3.0m (rough) vs Met Office &#x27;moderate&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<section class="report">
+<h2>2026-09-28 23:04 UTC — Earth-2 vs Met Office (random 3 areas)</h2>
+<p class="meta">Areas picked: Portland, Hebrides, Malin</p>
+<table>
+<thead><tr><th>Area</th><th>Earth-2 peak (day 1)</th><th>Earth-2 wave</th><th>Met Office wind</th><th>Met Office sea</th><th>Gale (E2 / MO)</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Portland</td><td>6</td><td>1.9m</td><td>6</td><td>Slight, occasionally moderate.</td><td>– / –</td><td class="verdict match">MATCH</td></tr>
+<tr><td>Hebrides</td><td>8</td><td>3.7m</td><td>9</td><td>Moderate or rough, occasionally very rough later in west.</td><td>Y / Y</td><td class="verdict disc">DISCREPANCY</td></tr>
+<tr><td>Malin</td><td>8</td><td>3.7m</td><td>9</td><td>Moderate or rough, occasionally very rough later in west.</td><td>Y / Y</td><td class="verdict disc">DISCREPANCY</td></tr>
+</tbody></table>
+<div class="area">
+<h3>Portland</h3>
+<ul>
+<li>Earth-2 (day 1): peak 6, wave 1.9m, gale warnings 3, storm systems 1, wave source: fetch-limited estimate (SMB/CEM, coastline-distance fetch)</li>
+<li>Earth-2 full window: 2026-09-28:F6, 2026-09-29:F9, 2026-09-30:F7, 2026-10-01:F7, 2026-10-02:F6, 2026-10-03:F5</li>
+<li>Met Office wind: East veering southeast, 4 to 6.</li>
+<li>Met Office sea state: Slight, occasionally moderate.</li>
+<li>Met Office weather: Showers, thundery at first. &nbsp;|&nbsp; visibility: Good, occasionally poor.</li>
+<li><b>Findings:</b></li>
+    <li>No discrepancies flagged on the overlapping 24h window.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Hebrides</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 3.7m, gale warnings 11, storm systems 2, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-28:F8, 2026-09-29:F10, 2026-09-30:F10, 2026-10-01:F10, 2026-10-02:F6, 2026-10-03:F6</li>
+<li>Met Office wind: Southeast 4 to 6, increasing 6 to gale 8, perhaps severe gale 9 later.</li>
+<li>Met Office sea state: Moderate or rough, occasionally very rough later in west.</li>
+<li>Met Office weather: Rain later. &nbsp;|&nbsp; visibility: Good, occasionally poor later.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 8 vs Met Office 9 (Earth-2 weaker).</li>
+    <li>Sea state: Earth-2 ~3.7m (rough) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<div class="area">
+<h3>Malin</h3>
+<ul>
+<li>Earth-2 (day 1): peak 8, wave 3.7m, gale warnings 11, storm systems 1, wave source: IFS Open Data (ECMWF, real wave model)</li>
+<li>Earth-2 full window: 2026-09-28:F8, 2026-09-29:F10, 2026-09-30:F10, 2026-10-01:F9, 2026-10-02:F7, 2026-10-03:F7</li>
+<li>Met Office wind: Southeast 4 to 6, increasing 6 to gale 8, perhaps severe gale 9 later.</li>
+<li>Met Office sea state: Moderate or rough, occasionally very rough later in west.</li>
+<li>Met Office weather: Rain later. &nbsp;|&nbsp; visibility: Good, occasionally poor later.</li>
+<li><b>Findings:</b></li>
+    <li>Peak force differs by one: Earth-2 8 vs Met Office 9 (Earth-2 weaker).</li>
+    <li>Sea state: Earth-2 ~3.7m (rough) vs Met Office &#x27;very rough&#x27; - different band.</li>
+</ul>
+</div>
+<p class="foot">Scope: the Met Office shipping forecast covers a 24h period; Earth-2 is a 5-6 day navigation forecast, so the comparable window is day 1. Earth-2 = ECMWF GFS/IFS; Met Office = UKV/IFS blend + forecaster. A 1-2 force peak split between them is normal.</p>
+</section>
+
+<!-- reports-append-here -->
+  </div>
+</main>
+</body>
+</html>
