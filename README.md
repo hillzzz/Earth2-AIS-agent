@@ -39,6 +39,10 @@ weather/AIS dashboard. Ask the agent questions about the weather and it will use
   forcasting weather slightly worse than the Met Office. an example report *forecast_comparison.html*
   is included in the repository.
 
+**Screenshot of one page of the comparison report which runs daily unattended**
+![earth 2 forecast comparison](compare.png)
+
+
 **AIS** (`ais_mcp_server.py`, server name `ais-tracker`), backed by
 `ais_ingest.py` - a standalone, continuously-running process that persists a
 throttled position history + latest static data per vessel to SQLite:
