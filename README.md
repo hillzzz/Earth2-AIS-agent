@@ -47,7 +47,9 @@ throttled position history + latest static data per vessel to SQLite:
   vessels with an unusually long AIS silence, optionally filtered to gaps
   that began near a real submarine cable route (`fetch_cable_data.py`,
   Baltic by default) - flags both still-dark vessels and ones that
-  reappeared elsewhere.
+  reappeared elsewhere. **You can use the agent to find a friend's vessel
+  Check a friends vessel isn't heading into a storm or warn them of danger
+  ahead** 
 
 ## What's not here
 
