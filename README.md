@@ -57,6 +57,14 @@ The  project this is a part of also has a FastAPI HTTP
 service, chart/animation rendering, and an Open WebUI tool plugin
 This repo is the part an *agent* calls directly.
 
+## planned improvements
+
+A sea surface temperature data feed will improve the accuracy of Earth2Studio's
+Forecasts, The sea temeperature data feed is free to use but you have to apply
+to the Met Office for access and our access request has not yet been processed
+When it is the software is ready to use the new feed and it will be interesting
+to see how that changes the output of the comparison reports.
+
 ## Setup
 
 ```bash
