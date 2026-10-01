@@ -32,7 +32,7 @@ weather/AIS dashboard. Ask the agent questions about the weather and it will use
   Shipping Forecast and compares the two forecasts and prepares a report in html
   format that compares the two forecsts*** Spoiler alert Earth2 is usually
   forcasting weather slightly worse than the Met Office. an example report *forecast_comparison.html*
-  is included.
+  is included in the repository.
 
 **AIS** (`ais_mcp_server.py`, server name `ais-tracker`), backed by
 `ais_ingest.py` - a standalone, continuously-running process that persists a
