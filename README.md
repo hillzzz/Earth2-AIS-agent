@@ -27,6 +27,11 @@ weather/AIS dashboard. Ask the agent questions about the weather and it will use
   running OpenCPN instance's chart display automatically, via OpenCPN's own
   REST server and `grib_pi`'s plugin-message API (`opencpn_bridge.py`) - no
   GUI automation, no custom OpenCPN plugin.
+
+**screenshot of plotter showing the forecast**
+  ![earth 2 forecast displayed on plotter](earth2-plotter.png)
+
+  
   ***Then separately it picks 3 random Met Office Shipping forecast areas and
   generates an Earth2Studio forecast for each area, then it retrieves the Met Office
   Shipping Forecast and compares the two forecasts and prepares a report in html
