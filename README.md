@@ -10,7 +10,7 @@ tool-calling agent.
 
 This is the agent-facing layer only (see "What's not here" below) - a
 focused set of MCP tools an agent can actually reason with, not a general
-weather/AIS dashboard.
+weather/AIS dashboard. Ask the agent questions about the weather and it will use the data to formulate and answer.
 
 ## What it does
 
@@ -27,6 +27,11 @@ weather/AIS dashboard.
   running OpenCPN instance's chart display automatically, via OpenCPN's own
   REST server and `grib_pi`'s plugin-message API (`opencpn_bridge.py`) - no
   GUI automation, no custom OpenCPN plugin.
+  ***Then separately it picks 3 random Met Office Shipping forecast areas and
+  generates an Earth2Studio forecast for each area, then it retrieves the Met Office
+  Shipping Forecast and compares the two forecasts and prepares a report in html
+  format that compares the two forecsts*** Spoiler alert Earth2 is usually
+  forcasting weather slightly worse than the Met Office.
 
 **AIS** (`ais_mcp_server.py`, server name `ais-tracker`), backed by
 `ais_ingest.py` - a standalone, continuously-running process that persists a
@@ -46,10 +51,9 @@ throttled position history + latest static data per vessel to SQLite:
 
 ## What's not here
 
-The original project this was extracted from also has a FastAPI HTTP
-service, chart/animation rendering, and an Open WebUI tool plugin - all
-deliberately left out. This repo is the part an *agent* calls directly; a
-human-facing dashboard is a different, separable concern.
+The  project this is a part of also has a FastAPI HTTP
+service, chart/animation rendering, and an Open WebUI tool plugin
+This repo is the part an *agent* calls directly.
 
 ## Setup
 
@@ -67,7 +71,7 @@ torch/CUDA version mismatch (common on non-x86_64 or unusual CUDA setups).
 No credentials are needed for weather forecasts themselves (GFS, NOAA's
 public data, no API key). Two things do need setup:
 
-**AIS** - a free key from [aisstream.io](https://aisstream.io). Copy
+**AIS** a free key from [aisstream.io](https://aisstream.io). Copy
 `service/.env.example` to `service/.env` and set `AIS_API_KEY`. Use your own
 key - don't share a connection with another AIS consumer you might already
 run; aisstream.io allows one connection per key, and two consumers sharing
