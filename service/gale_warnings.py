@@ -61,6 +61,37 @@ def beaufort_name(force: int) -> str:
     return "Hurricane Force"
 
 
+# Met Office gale-warning gust criteria: a warning for force F is issued when
+# the MEAN wind reaches force F *or* gusts reach these speeds. Hurricane force
+# (12) has no gust criterion - it needs a 64 kt mean wind.
+WARNING_GUST_KTS = [(43, 8), (52, 9), (61, 10), (69, 11)]
+
+
+def warning_force(mean_kts: float, gust_kts: Optional[float]) -> int:
+    """Shipping-Forecast warning category from mean wind and (optional) gusts.
+
+    Beaufort force itself is defined on the MEAN wind - converting a gust
+    speed straight to a force (as this module once did) reads 1-3 forces high:
+    a live Viking run turned 81 kt ECMWF gusts over a ~44 kt mean into
+    "Force 12, hurricane force". Gusts only raise the *warning* level, using
+    the Met Office's own gust thresholds above.
+    """
+    force = beaufort_force(mean_kts)
+    if gust_kts is not None and not np.isnan(gust_kts):
+        for lo, f in WARNING_GUST_KTS:
+            if gust_kts >= lo:
+                force = max(force, f)
+    return force
+
+
+def _max_speed_kts(wind_u_i: np.ndarray, wind_v_i: Optional[np.ndarray]) -> float:
+    """Domain-max mean wind speed (kt) for one timestep. wind_v_i None falls
+    back to |u| - only for old callers that never passed the v component."""
+    if wind_v_i is None:
+        return float(np.nanmax(np.abs(wind_u_i))) * MS_TO_KTS
+    return float(np.nanmax(np.sqrt(wind_u_i ** 2 + wind_v_i ** 2))) * MS_TO_KTS
+
+
 def _timing_bucket(hours_ahead: float) -> str:
     if hours_ahead < 6:
         return "Imminent"
@@ -90,11 +121,13 @@ def generate_wind_warnings(
 ) -> List[Dict]:
     """
     Scan each forecast timestep for the strongest wind anywhere in the domain
-    and emit a warning whenever the Beaufort force reaches min_force.
+    and emit a warning whenever the warning category (warning_force: mean-wind
+    Beaufort force, raised by Met Office gust criteria) reaches min_force.
 
     wind_u/wind_v: arrays shaped [time, lat, lon] (m/s).
-    gust_factor: applied to mean wind to approximate gusts when a dedicated
-    gust field isn't available (see generate_wind_warnings_with_gusts).
+    gust_factor: applied to mean wind to ESTIMATE gusts when a dedicated
+    gust field isn't available (see generate_wind_warnings_with_gusts). The
+    estimate only feeds the gust criteria; the force is the mean wind's.
     base_time: the forecast's own issue/analysis time (timesteps[0]) - not
     wall-clock "now". Imminent/Soon/Later/Outlook is timed from when the
     forecast was issued, same as a real Shipping Forecast bulletin, not
@@ -111,14 +144,14 @@ def generate_wind_warnings(
     for i, ts in enumerate(timesteps):
         if i >= wind_u.shape[0]:
             break
-        speed_ms = np.sqrt(wind_u[i] ** 2 + wind_v[i] ** 2)
-        max_speed_kts = float(np.nanmax(speed_ms)) * MS_TO_KTS
+        max_speed_kts = _max_speed_kts(wind_u[i], wind_v[i])
         gust_kts = max_speed_kts * gust_factor
-        force = beaufort_force(gust_kts)
+        force = warning_force(max_speed_kts, gust_kts)
 
         if force >= min_force:
             hours_ahead = max(0.0, (ts - base_time).total_seconds() / 3600.0)
             timing = _timing_bucket(hours_ahead)
+            mean_force = beaufort_force(max_speed_kts)
             warnings.append({
                 "type": "wind",
                 "area": area_name,
@@ -126,11 +159,14 @@ def generate_wind_warnings(
                 "timing": timing,
                 "beaufort_force": force,
                 "beaufort_name": beaufort_name(force),
+                "mean_wind_force": mean_force,
                 "max_mean_wind_kts": round(max_speed_kts, 1),
                 "max_gust_kts": round(gust_kts, 1),
+                "gust_estimated": True,
                 "message": (
-                    f"{beaufort_name(force)} warning (Force {force}) for {area_name}: "
-                    f"gusts to {gust_kts:.0f} kt, {_format_valid_time(ts)} ({timing.lower()})"
+                    f"{beaufort_name(force)} warning for {area_name}: mean wind to "
+                    f"{max_speed_kts:.0f} kt (Force {mean_force}), gusts estimated to {gust_kts:.0f} kt, "
+                    f"{_format_valid_time(ts)} ({timing.lower()})"
                 ),
             })
 
@@ -324,6 +360,11 @@ def daily_breakdown(forecast_data: Dict, base_time: Optional[datetime] = None) -
     base_time - independent of which timestep had the max force/wave,
     since a day can validly have its worst-case wind and worst-case
     timing at different hours.
+
+    max_beaufort_force is the MEAN-wind force (the Beaufort definition, and
+    what the Met Office Shipping Forecast quotes). max_gust_kts is the day's
+    highest forecast gust, reported separately - None when there is no real
+    gust field (a mean x 1.3 estimate isn't worth quoting as a gust).
     """
     variables = forecast_data.get("variables", {})
     timesteps = forecast_data.get("timesteps", [])
@@ -341,12 +382,12 @@ def daily_breakdown(forecast_data: Dict, base_time: Optional[datetime] = None) -
     for i, ts in enumerate(timesteps):
         if i >= wind_u.shape[0]:
             break
+        mean_kts = _max_speed_kts(wind_u[i], wind_v[i])
         if gust is not None and i < gust.shape[0] and not np.all(np.isnan(gust[i])):
             gust_kts = float(np.nanmax(gust[i])) * MS_TO_KTS
         else:
-            speed_ms = np.sqrt(wind_u[i] ** 2 + wind_v[i] ** 2)
-            gust_kts = float(np.nanmax(speed_ms)) * MS_TO_KTS * 1.3
-        force = beaufort_force(gust_kts)
+            gust_kts = None
+        force = beaufort_force(mean_kts)
         # np.nanmax of an all-NaN slice is nan, not an error - guard
         # against it explicitly (max_wave_height_m: None) rather than
         # letting nan propagate into the comparisons below, where it would
@@ -365,6 +406,8 @@ def daily_breakdown(forecast_data: Dict, base_time: Optional[datetime] = None) -
                 "date": key,
                 "max_beaufort_force": force,
                 "max_beaufort_name": beaufort_name(force),
+                "max_mean_wind_kts": round(mean_kts),
+                "max_gust_kts": round(gust_kts) if gust_kts is not None else None,
                 "max_wave_height_m": round(wave_m, 1) if wave_m is not None else None,
                 "worst_timing": _timing_bucket(hours_ahead),
             }
@@ -375,6 +418,9 @@ def daily_breakdown(forecast_data: Dict, base_time: Optional[datetime] = None) -
         if force > day["max_beaufort_force"]:
             day["max_beaufort_force"] = force
             day["max_beaufort_name"] = beaufort_name(force)
+        day["max_mean_wind_kts"] = max(day["max_mean_wind_kts"], round(mean_kts))
+        if gust_kts is not None and (day["max_gust_kts"] is None or gust_kts > day["max_gust_kts"]):
+            day["max_gust_kts"] = round(gust_kts)
         if wave_m is not None and (day["max_wave_height_m"] is None or wave_m > day["max_wave_height_m"]):
             day["max_wave_height_m"] = round(wave_m, 1)
         if hours_ahead < min_hours[key]:
@@ -423,7 +469,8 @@ def build_warnings_bundle(
     if wind_u is not None and wind_v is not None:
         gust = variables.get("wind_gust")
         if gust is not None:
-            bundle["wind"] = generate_wind_warnings_with_gusts(wind_u, gust, timesteps, area_name, min_force, base_time=base_time)
+            bundle["wind"] = generate_wind_warnings_with_gusts(wind_u, gust, timesteps, area_name, min_force,
+                                                               base_time=base_time, wind_v=wind_v)
         else:
             bundle["wind"] = generate_wind_warnings(wind_u, wind_v, timesteps, area_name, min_force, base_time=base_time)
 
@@ -446,10 +493,14 @@ def generate_wind_warnings_with_gusts(
     area_name: str,
     min_force: int = 8,
     base_time: Optional[datetime] = None,
+    wind_v: Optional[np.ndarray] = None,
 ) -> List[Dict]:
-    """Same as generate_wind_warnings but uses a real gust field (e.g. from
-    the earth2studio windgust-afno diagnostic) instead of a fixed multiplier.
-    base_time: see generate_wind_warnings."""
+    """Same as generate_wind_warnings but uses a real gust field (e.g. ECMWF
+    fg10m or the earth2studio windgust-afno diagnostic) for the Met Office gust
+    criteria instead of a fixed multiplier. The force is still the mean wind's.
+    wind_v: the v component, for the true mean wind speed (without it the
+    mean falls back to |u| alone, which under-reads any wind not blowing
+    east-west). base_time: see generate_wind_warnings."""
     base_time = base_time or (timesteps[0] if timesteps else datetime.now(timezone.utc))
     warnings = []
 
@@ -457,12 +508,13 @@ def generate_wind_warnings_with_gusts(
         if i >= wind_gust_ms.shape[0]:
             break
         gust_kts = float(np.nanmax(wind_gust_ms[i])) * MS_TO_KTS
-        mean_kts = float(np.nanmax(np.abs(wind_u[i]))) * MS_TO_KTS
-        force = beaufort_force(gust_kts)
+        mean_kts = _max_speed_kts(wind_u[i], wind_v[i] if wind_v is not None else None)
+        force = warning_force(mean_kts, gust_kts)
 
         if force >= min_force:
             hours_ahead = max(0.0, (ts - base_time).total_seconds() / 3600.0)
             timing = _timing_bucket(hours_ahead)
+            mean_force = beaufort_force(mean_kts)
             warnings.append({
                 "type": "wind",
                 "area": area_name,
@@ -470,11 +522,14 @@ def generate_wind_warnings_with_gusts(
                 "timing": timing,
                 "beaufort_force": force,
                 "beaufort_name": beaufort_name(force),
+                "mean_wind_force": mean_force,
                 "max_mean_wind_kts": round(mean_kts, 1),
                 "max_gust_kts": round(gust_kts, 1),
+                "gust_estimated": False,
                 "message": (
-                    f"{beaufort_name(force)} warning (Force {force}) for {area_name}: "
-                    f"gusts to {gust_kts:.0f} kt, {_format_valid_time(ts)} ({timing.lower()})"
+                    f"{beaufort_name(force)} warning for {area_name}: mean wind to "
+                    f"{mean_kts:.0f} kt (Force {mean_force}), gusts to {gust_kts:.0f} kt, "
+                    f"{_format_valid_time(ts)} ({timing.lower()})"
                 ),
             })
 
@@ -495,7 +550,8 @@ def generate_probabilistic_wind_warnings(
     """
     Ensemble-based probabilistic gale/storm warnings: for each timestep, the
     fraction of ensemble members whose domain-max wind reaches min_force
-    (approximated via gust_factor, same as the deterministic heuristic path -
+    (warning_force: mean-wind force, with gusts estimated via gust_factor for
+    the Met Office gust criteria, same as the deterministic heuristic path -
     ECMWF Open Data's ensemble products don't carry a gust field). Emits a
     warning whenever that fraction clears probability_threshold, so a
     forecast can say "60% of members show gale force winds" instead of a
@@ -518,9 +574,8 @@ def generate_probabilistic_wind_warnings(
 
         member_forces = []
         for m in range(n_members):
-            speed_ms = np.sqrt(member_wind_u[m, i] ** 2 + member_wind_v[m, i] ** 2)
-            gust_kts = float(np.nanmax(speed_ms)) * MS_TO_KTS * gust_factor
-            member_forces.append(beaufort_force(gust_kts))
+            mean_kts = _max_speed_kts(member_wind_u[m, i], member_wind_v[m, i])
+            member_forces.append(warning_force(mean_kts, mean_kts * gust_factor))
 
         member_forces = np.array(member_forces)
         probability = float((member_forces >= min_force).mean())
