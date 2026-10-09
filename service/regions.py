@@ -67,7 +67,7 @@ NORTH_ATLANTIC_AREAS: Dict[str, SeaArea] = {
         (Port("Fastnet Rock", 51.38, -9.60), Port("Cork", 51.90, -8.47)),
     ),
     "lundy": SeaArea(
-        "Lundy", "north_atlantic", (50, -6, 52, -3), (51.2, -4.7), 80,
+        "Lundy", "north_atlantic", (50.5, -6, 52, -3), (51.2, -4.7), 80,  # S edge 50.5: was 50, which swallowed the S Devon/Cornish coast
         (Port("Bristol", 51.45, -2.60), Port("Swansea", 51.62, -3.94)),
     ),
     "irish_sea": SeaArea(
@@ -159,7 +159,7 @@ NORTH_SEA_AREAS: Dict[str, SeaArea] = {
 # ---------------------------------------------------------------------------
 ENGLISH_CHANNEL_AREAS: Dict[str, SeaArea] = {
     "solent": SeaArea(
-        "Solent", "english_channel", (50.5, -2.0, 51.0, -0.8), (50.7633, -1.2985), 50,
+        "Solent", "english_channel", (50.5, -1.6, 51.0, -0.8), (50.7633, -1.2985), 50,  # W edge ~Hurst/Needles; Poole is not the Solent
         (
             Port("Southampton", 50.9097, -1.4044),
             Port("Portsmouth", 50.8198, -1.0880),
@@ -179,11 +179,13 @@ ENGLISH_CHANNEL_AREAS: Dict[str, SeaArea] = {
     ),
     "portland": SeaArea(
         "Portland", "english_channel", (49.5, -3.5, 51, -1.5), (50.3, -2.5), 60,
-        (Port("Weymouth", 50.61, -2.46), Port("Portland", 50.57, -2.43)),
+        (Port("Weymouth", 50.61, -2.46), Port("Portland", 50.57, -2.43),
+         Port("Poole", 50.713, -1.985)),
     ),
     "plymouth": SeaArea(
-        "Plymouth", "english_channel", (49.5, -5, 51, -3), (50.2, -4.1), 70,
-        (Port("Plymouth", 50.37, -4.14), Port("Falmouth", 50.15, -5.06)),
+        "Plymouth", "english_channel", (49.5, -6, 51, -3), (50.2, -4.1), 70,  # W edge -6 so Falmouth/Lizard are inside
+        (Port("Plymouth", 50.37, -4.14), Port("Falmouth", 50.15, -5.06),
+         Port("Dartmouth", 50.351, -3.579), Port("Salcombe", 50.238, -3.769)),
     ),
     "english_channel": SeaArea(
         "English Channel", "english_channel", (49, -5.5, 51, 2), (50.2, -1.7), 150,
