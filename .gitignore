@@ -1,0 +1,7 @@
+# Generated forecasts (GRIB2, summaries, charts) - large, regenerated daily.
+forecasts/
+__pycache__/
+# Dated backup copies (made before every edit, kept on disk, never committed).
+*.bak
+*.bak-*
+*.bak.*
